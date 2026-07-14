@@ -10,6 +10,8 @@ import { TOKEN_SIGNER } from './domain/port/token-signer.port';
 import { JwtTokenSigner } from './infrastructure/adapter/jwt-token.signer';
 import { USER_CREDENTIALS } from './domain/port/user-credentials.port';
 import { TypeormUserCredentialsAdapter } from './infrastructure/adapter/typeorm-user-credentials.adapter';
+import { APP_FILTER } from '@nestjs/core';
+import { AuthExceptionFilter } from './presentation/filter/auth-exception.filter';
 
 @Module({
   imports: [
@@ -23,6 +25,7 @@ import { TypeormUserCredentialsAdapter } from './infrastructure/adapter/typeorm-
     RefreshTokenUseCase,
     { provide: TOKEN_SIGNER, useClass: JwtTokenSigner },
     { provide: USER_CREDENTIALS, useClass: TypeormUserCredentialsAdapter },
+    { provide: APP_FILTER, useClass: AuthExceptionFilter },
   ],
 })
 export class AuthModule {}
