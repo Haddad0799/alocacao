@@ -13,17 +13,35 @@ import { Role } from '../../domain/valueobject/role';
 import { Roles } from '../../../auth/infrastructure/decorator/roles.decorator';
 import { RolesGuard } from '../../../auth/infrastructure/guard/roles.guard';
 
-@Controller('developers')
+@Controller('users')
 @UseGuards(RolesGuard)
-@Roles(Role.ADMIN, Role.MANAGER)
-export class DeveloperController {
+export class UserController {
   constructor(private readonly createUser: CreateUserUseCase) {}
 
-  @Post()
+  @Post('admins')
+  @Roles(Role.ADMIN)
   @HttpCode(HttpStatus.CREATED)
-  async create(@Body() dto: CreateUserDto) {
+  createAdmin(@Body() dto: CreateUserDto) {
+    return this.create(dto, Role.ADMIN);
+  }
+
+  @Post('managers')
+  @Roles(Role.ADMIN)
+  @HttpCode(HttpStatus.CREATED)
+  createManager(@Body() dto: CreateUserDto) {
+    return this.create(dto, Role.MANAGER);
+  }
+
+  @Post('developers')
+  @Roles(Role.ADMIN, Role.MANAGER)
+  @HttpCode(HttpStatus.CREATED)
+  createDeveloper(@Body() dto: CreateUserDto) {
+    return this.create(dto, Role.DEVELOPER);
+  }
+
+  private async create(dto: CreateUserDto, role: Role) {
     const user = await this.createUser.execute(
-      new CreateUserCommand(dto.name, dto.email, dto.password, Role.DEVELOPER),
+      new CreateUserCommand(dto.name, dto.email, dto.password, role),
     );
     return {
       id: user.id,

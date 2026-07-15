@@ -1,4 +1,3 @@
-// auth/presentation/filter/auth-exception.filter.ts
 import {
   ArgumentsHost,
   Catch,

@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
 import { JwtAuthGuard } from './auth/infrastructure/guard/jwt-auth.guard';
+import { HttpExceptionFilter } from './common/filter/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -34,6 +35,8 @@ async function bootstrap() {
       config,
     ),
   );
+
+  app.useGlobalFilters(new HttpExceptionFilter());
 
   await app.listen(3000);
 }
