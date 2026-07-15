@@ -66,4 +66,17 @@ export class AuthController {
     res.cookie(REFRESH_COOKIE, refreshToken, cookieOptions);
     return { accessToken };
   }
+
+  @Public()
+@Post('logout')
+@HttpCode(HttpStatus.OK)
+async logout(@Res({ passthrough: true }) res: Response): Promise<{ message: string }> {
+  res.clearCookie('refreshToken', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    path: '/auth/refresh',
+  });
+  return { message: 'Logged out' };
+}
 }

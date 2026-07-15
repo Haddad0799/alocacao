@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
@@ -12,6 +13,9 @@ import { CreateUserDto } from '../dto/create-user.dto';
 import { Role } from '../../domain/valueobject/role';
 import { Roles } from '../../../auth/infrastructure/decorator/roles.decorator';
 import { RolesGuard } from '../../../auth/infrastructure/guard/roles.guard';
+import type { AuthUser} from '../../../auth/infrastructure/decorator/current-user.decorator';
+import { CurrentUser } from '../../../auth/infrastructure/decorator/current-user.decorator';
+
 
 @Controller('users')
 @UseGuards(RolesGuard)
@@ -38,6 +42,11 @@ export class UserController {
   createDeveloper(@Body() dto: CreateUserDto) {
     return this.create(dto, Role.DEVELOPER);
   }
+
+@Get('me')
+me(@CurrentUser() user: AuthUser) {
+  return { id: user.id, role: user.role };
+}
 
   private async create(dto: CreateUserDto, role: Role) {
     const user = await this.createUser.execute(
