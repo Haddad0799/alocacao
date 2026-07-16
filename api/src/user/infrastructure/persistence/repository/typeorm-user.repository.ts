@@ -5,6 +5,7 @@ import { User } from '../../../domain/entity/user';
 import type { UserRepositoryPort } from '../../../domain/port/user.repository.port';
 import { UserEntity } from '../../entities/user.entity';
 import { Email } from '../../../domain/valueobject/email';
+import { Role } from '../../../domain/valueobject/role';
 
 @Injectable()
 export class TypeOrmUserRepository implements UserRepositoryPort {
@@ -23,6 +24,13 @@ export class TypeOrmUserRepository implements UserRepositoryPort {
     const saved = await this.repo.save(this.toOrm(user));
     return this.toDomain(saved);
   }
+
+  async findByRole(role: Role): Promise<User[]> {
+  const rows = await this.repo.find({ where: { role } });
+  return rows.map((r) =>
+    User.restore(r.id, r.name, Email.of(r.email), r.passwordHash, r.role as Role),
+  );
+}
 
   private toDomain(orm: UserEntity): User {
     const user = User.restore(

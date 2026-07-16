@@ -10,6 +10,8 @@ import { DEVELOPER_PROFILE_REPOSITORY } from './domain/port/developer-profile.re
 import { CreateDeveloperProfileUseCase } from './application/usecase/create-developer-profile.usecase';
 import { DeveloperProfileController } from './presentation/rest/developer-profile.controller';
 import { DeveloperExceptionFilter } from './presentation/filter/developer-exception.filter';
+import { GetDeveloperProfileUseCase } from './application/usecase/get-developer-profile.usecase';
+import { UpdateDeveloperProfileUseCase } from './application/usecase/update-developer-profile.usecase';
 
 @Module({
   imports: [
@@ -20,6 +22,8 @@ import { DeveloperExceptionFilter } from './presentation/filter/developer-except
   controllers: [DeveloperProfileController],
   providers: [
     CreateDeveloperProfileUseCase,
+    GetDeveloperProfileUseCase,
+    UpdateDeveloperProfileUseCase,
     {
       provide: DEVELOPER_PROFILE_REPOSITORY,
       useClass: MongooseDeveloperProfileRepository,

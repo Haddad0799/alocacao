@@ -9,6 +9,7 @@ import { AdminSeeder } from './infrastructure/seed/admin.seeder';
 import { APP_FILTER } from '@nestjs/core';
 import { UserExceptionFilter } from './presentation/filter/user-exception.filter';
 import { UserController } from './presentation/rest/user.controller';
+import { ListUsersByRoleUseCase } from './application/usecase/list-users-by-roles.usecase';
 
 
 @Module({
@@ -18,7 +19,7 @@ import { UserController } from './presentation/rest/user.controller';
   ],
   controllers: [UserController],
   providers: [
-    CreateUserUseCase,
+    CreateUserUseCase, ListUsersByRoleUseCase,
     { provide: USER_REPOSITORY, useClass: TypeOrmUserRepository },
     AdminSeeder,
     { provide: APP_FILTER, useClass: UserExceptionFilter },

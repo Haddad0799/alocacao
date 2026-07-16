@@ -27,6 +27,12 @@ export class DeveloperProfile {
     return new DeveloperProfile(undefined, userId, seniority, stack, skills, true);
   }
 
+  update(seniority: Seniority, stack: string[], skills: Skill[]) {
+    (this as any).seniority = seniority;
+    (this as any).stack = stack;
+    (this as any).skills = skills;
+  }
+
   static restore(
     id: string,
     userId: string,

@@ -6,6 +6,8 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { SecurityModule } from './security/security.module';
 import { DeveloperModule } from './developer/developer.module';
+import { ProjectModule } from './project/project.module';
+import { AllocationModule } from './allocation/allocation.module';
 
 @Module({
   imports: [
@@ -38,7 +40,9 @@ import { DeveloperModule } from './developer/developer.module';
     AuthModule,
     UserModule,
     SecurityModule,
-    DeveloperModule
+    DeveloperModule,
+    ProjectModule,
+    AllocationModule
   ],
 })
 export class AppModule {}

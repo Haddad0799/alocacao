@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+
 import { DeveloperProfile } from '../../domain/entity/developer-profile.entity';
 import type { DeveloperProfileRepositoryPort } from '../../domain/port/developer-profile.repository.port';
 import {
-  DeveloperProfileModel,
   DeveloperProfileDocument,
+  DeveloperProfileModel,
 } from '../schema/developer-profile.schema';
 
 @Injectable()
@@ -18,19 +19,36 @@ export class MongooseDeveloperProfileRepository
   ) {}
 
   async save(profile: DeveloperProfile): Promise<DeveloperProfile> {
-    const created = await this.model.create({
-      userId: profile.userId,
-      seniority: profile.seniority,
-      stack: profile.stack,
-      skills: profile.skills,
-      available: profile.available,
-    });
-    return this.toDomain(created);
-  }
+  const updated = await this.model
+    .findOneAndUpdate(
+      { userId: profile.userId },
+      {
+        $set: {
+          userId: profile.userId,
+          seniority: profile.seniority,
+          stack: profile.stack,
+          skills: profile.skills,
+          available: profile.available,
+        },
+      },
+      {
+        upsert: true,
+        returnDocument: 'after',
+      },
+    )
+    .exec();
+
+  return this.toDomain(updated!);
+}
 
   async findByUserId(userId: string): Promise<DeveloperProfile | null> {
     const doc = await this.model.findOne({ userId }).exec();
-    return doc ? this.toDomain(doc) : null;
+
+    if (!doc) {
+      return null;
+    }
+
+    return this.toDomain(doc);
   }
 
   private toDomain(doc: DeveloperProfileDocument): DeveloperProfile {

@@ -15,12 +15,15 @@ import { Roles } from '../../../auth/infrastructure/decorator/roles.decorator';
 import { RolesGuard } from '../../../auth/infrastructure/guard/roles.guard';
 import type { AuthUser} from '../../../auth/infrastructure/decorator/current-user.decorator';
 import { CurrentUser } from '../../../auth/infrastructure/decorator/current-user.decorator';
+import { ListUsersByRoleUseCase } from '../../application/usecase/list-users-by-roles.usecase';
 
 
 @Controller('users')
 @UseGuards(RolesGuard)
 export class UserController {
-  constructor(private readonly createUser: CreateUserUseCase) {}
+  constructor(private readonly createUser: CreateUserUseCase,
+    private readonly listByRole: ListUsersByRoleUseCase
+  ) {}
 
   @Post('admins')
   @Roles(Role.ADMIN)
@@ -46,6 +49,18 @@ export class UserController {
 @Get('me')
 me(@CurrentUser() user: AuthUser) {
   return { id: user.id, role: user.role };
+}
+
+@Get('developers')
+@Roles(Role.ADMIN, Role.MANAGER)
+async listDevelopers() {
+  const users = await this.listByRole.execute(Role.DEVELOPER);
+  return users.map((u) => ({
+    id: u.id,
+    name: u.name,
+    email: u.email.value,
+    role: u.role,
+  }));
 }
 
   private async create(dto: CreateUserDto, role: Role) {
