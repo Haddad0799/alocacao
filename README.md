@@ -1,6 +1,6 @@
 # Alocacao
  
-API fullstack desenvolvida com **NestJS + React** como projeto laboratório, com foco deliberado em segurança de aplicação (OWASP Top 10 2025).
+API fullstack desenvolvida com **NestJS + React** como projeto laboratório, com foco deliberado em segurança de aplicação (OWASP Top 10 2026).
  
 A motivação foi prática: depois de uma entrevista técnica onde não soube responder bem perguntas sobre OWASP, decidi estudar o tema a fundo e aplicar o que aprendi aqui. Este README documenta o que foi coberto, o raciocínio por trás de cada decisão, e o que ainda falta.
  
@@ -90,7 +90,7 @@ O módulo `security/` é isolado e expõe apenas uma porta (`PasswordHasherPort`
  
 Reconhecer o que falta faz parte de entender segurança de verdade.
  
-**A03 — Software Supply Chain Failures**
+**A03 — Software Supply Chain Failures** *(categoria nova e crítica na edição 2026)*
 Dependências não utilizadas (`passport`, `passport-jwt`, `pg`) estão instaladas mas não são usadas — aumentam a superfície de ataque sem necessidade. Além disso, não há pipeline de CI/CD com varredura automatizada de dependências. A ferramenta padrão da indústria para isso é o **OWASP Dependency-Check**, compatível com Node.js e integrável em pipelines de build — alternativa mais robusta ao `npm audit` para detecção de CVEs em dependências transitivas.
  
 **A06 — Sem rate limiting no login e no refresh**
@@ -120,4 +120,3 @@ O projeto não passou por testes de penetração automatizados. O **OWASP ZAP** 
 | Validação global | `api/src/main.ts` |
 | Filtro de exceções | `api/src/common/filter/http-exception.filter.ts` |
 | Token em memória | `web/src/api/client.ts` |
- 
