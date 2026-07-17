@@ -85,7 +85,7 @@ O módulo `security/` é isolado e expõe apenas uma porta (`PasswordHasherPort`
 
 ### A08 / A10 — Integridade e SSRF
 
-Não há upload de arquivo, `eval`, deserialização de dados externos, nem chamada HTTP de saída que use URL vinda do usuário. Essas categorias não se aplicam ao formato atual — mas é importante saber *por que* não se aplicam, não apenas não ter pensado nisso.
+Não há upload de arquivo, `eval`, deserialização de dados externos, nem chamada HTTP de saída que use URL vinda do usuário. Essas categorias não se aplicam ao formato atual.
 
 ---
 
