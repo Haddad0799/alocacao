@@ -11,7 +11,6 @@ export const api = axios.create({
   withCredentials: true,
 });
 
-
 api.interceptors.request.use((config) => {
   if (accessToken) {
     config.headers.Authorization = `Bearer ${accessToken}`;
@@ -26,9 +25,7 @@ api.interceptors.response.use(
 
     const shouldRefresh =
       error.response?.status === 401 &&
-      !original._retry &&
-      !original.url?.includes('/auth/refresh') &&
-      !original.url?.includes('/auth/login');
+      !original._retry;
 
     if (!shouldRefresh) {
       return Promise.reject(error);
@@ -43,6 +40,7 @@ api.interceptors.response.use(
       return api(original);
     } catch (refreshError) {
       setAccessToken(null);
+      window.location.href = '/login';
       return Promise.reject(refreshError);
     }
   },

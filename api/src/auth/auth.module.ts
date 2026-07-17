@@ -3,7 +3,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from '../user/infrastructure/entities/user.entity';
 import { SecurityModule } from '../security/security.module';
-import { AuthController } from './presentation/auth.controller';
+import { AuthController } from './presentation/rest/auth.controller';
 import { LoginUseCase } from './application/usecase/login.usecase';
 import { RefreshTokenUseCase } from './application/usecase/refresh-token.usecase';
 import { TOKEN_SIGNER } from './domain/port/token-signer.port';
